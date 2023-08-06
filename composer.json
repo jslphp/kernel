@@ -1,0 +1,27 @@
+{
+    "name": "jsl/kernel",
+    "description": "A simple kernel for web apps",
+    "type": "library",
+    "minimum-stability": "stable",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Magnus Eriksson",
+            "email": "mange@reloop.se"
+        }
+    ],
+    "require": {
+        "illuminate/container": "^10.17",
+        "symfony/http-foundation": "^6.3",
+        "jsl/config": "^1.0",
+        "jsl/router": "^0.2.6"
+    },
+    "autoload": {
+        "files": [
+            "src/Helpers/helpers.php"
+        ],
+        "psr-4": {
+            "Jsl\\Kernel\\": "src/"
+        }
+    }
+}
