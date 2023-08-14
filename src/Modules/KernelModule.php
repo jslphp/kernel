@@ -32,13 +32,7 @@ class KernelModule extends AbstractModule
      */
     public function boot(Kernel $kernel): void
     {
-        /**
-         * Just a fix since the interface is currently missing the setClassResolver method
-         * @var Router $router
-         */
-        $router = $kernel->router;
-        $router->addFixedArguments([$kernel->request])
-            ->setClassResolver(fn ($class) => $kernel->get($class));
+        $kernel->router->setClassResolver(fn ($class) => $kernel->get($class));
 
         $kernel->bind(SessionInterface::class, function () {
             $session = new Session;

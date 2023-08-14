@@ -2,6 +2,7 @@
 
 use Symfony\Component\HttpFoundation\ParameterBag;
 
+require __DIR__ . '/shortcuts.php';
 
 /**
  * Check if a class or object implements a specific interface
@@ -75,6 +76,19 @@ function className(string|object $classOrObject): string
 
 
 /**
+ * Escape HTML
+ *
+ * @param mixed $string Must be stringable
+ *
+ * @return string
+ */
+function _e($string): string
+{
+    return htmlentities((string)$string);
+}
+
+
+/**
  * Dump elements
  *
  * @param mixed ...$data
@@ -83,7 +97,11 @@ function className(string|object $classOrObject): string
  */
 function dump(...$data): void
 {
+    $caller = debug_backtrace(limit: 2)[1];
+    $line = $caller['file'] . ':' . $caller['line'];
+
     echo '<pre style="padding: 20px; background-color: #222; color: #ff5; font: 13px monospace; border-radius: 5px">';
+    echo '<div style="font-size: 12px; color: #888; margin-bottom: 10px; padding-bottom: 10px; border-bottom: solid 1px #333">' . $line . '</div>';
     var_dump(...$data);
     echo '</pre>';
 }

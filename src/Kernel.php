@@ -6,6 +6,8 @@ use Closure;
 use Illuminate\Container\Container;
 use Jsl\Config\Config;
 use Jsl\Config\Contracts\ConfigInterface;
+use Jsl\Kernel\Controllers\BaseController;
+use Jsl\Kernel\Exceptions\KernelException;
 use Jsl\Kernel\Modules\KernelModule;
 use Jsl\Kernel\Modules\ModuleInterface;
 use Jsl\Kernel\Modules\Registry as ModuleRegistry;
@@ -62,6 +64,8 @@ class Kernel
      */
     public function __construct(array $configs = [])
     {
+        static::$instance ??= $this;
+
         $this->container = new Container;
         $this->container->instance($this::class, $this);
         $this->modules = new ModuleRegistry;
@@ -71,10 +75,13 @@ class Kernel
         $this->request = Request::createFromGlobals();
         $this->container->instance(RequestInterface::class, $this->request);
         $this->router = new Router;
-
-        $this->addModule(KernelModule::class);
+        $this->container->instance(RouterInterface::class, $this->router);
 
         $this->setup();
+        $this->addModule(KernelModule::class);
+        $this->addModules($this->config->get('modules', []));
+
+        BaseController::setKernel($this);
     }
 
 
@@ -199,6 +206,21 @@ class Kernel
         );
 
         return null;
+    }
+
+
+    /**
+     * Get the first instantiated Kernel instance
+     * 
+     * @return Kernel
+     */
+    public static function getKernel(): Kernel
+    {
+        if (static::$instance === null) {
+            throw new KernelException("An instance of the Kernel must be instantiated before you can retrieve it");
+        }
+
+        return static::$instance;
     }
 
 

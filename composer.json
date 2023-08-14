@@ -2,7 +2,7 @@
     "name": "jsl/kernel",
     "description": "A simple kernel for web apps",
     "type": "library",
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "license": "MIT",
     "authors": [
         {
